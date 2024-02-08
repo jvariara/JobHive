@@ -10,10 +10,12 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const Page = () => {
+  const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const [errors, setErrors] = useState({
+    email: "",
     username: "",
     password: "",
   });
@@ -39,16 +41,16 @@ const Page = () => {
               className="object-cover aspect-square"
             />
 
-            <h1 className="text-2xl font-bold">Sign in to your account</h1>
+            <h1 className="text-2xl font-bold">Create an account</h1>
 
             <Link
-              href="/sign-up"
+              href="/sign-in"
               className={buttonVariants({
                 variant: "link",
                 className: "gap-1.5",
               })}
             >
-              Don&apos;t have an account? Sign up now! &rarr;
+              Already have an account? Sign In &rarr;
             </Link>
           </div>
 
@@ -56,6 +58,22 @@ const Page = () => {
           <div>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-2">
+                {/* Email */}
+                <div className="gap-2 py-2 grid">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    className={cn({
+                      "focus-visible:ring-red-500": errors.email,
+                    })}
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
+                  />
+                  {errors?.email && (
+                    <p className="text-sm text-red-500">{errors.email}</p>
+                  )}
+                </div>
 
                 {/* Username */}
                 <div className="gap-2 py-2 grid">
@@ -110,13 +128,13 @@ const Page = () => {
             </div>
 
             <Link
-              href="/sign-up"
+              href="/sign-in"
               className={buttonVariants({
                 variant: "secondary",
                 className: "gap-1.5 grid",
               })}
             >
-              Create Account
+              Sign In
             </Link>
           </div>
         </div>

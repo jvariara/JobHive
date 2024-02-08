@@ -59,7 +59,7 @@ const Page = () => {
             <form onSubmit={handleSubmit}>
               <div className="grid gap-2">
                 {/* Email */}
-                <div className="gap-1 py-2 grid">
+                <div className="gap-2 py-2 grid">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     className={cn({
@@ -76,8 +76,8 @@ const Page = () => {
                 </div>
 
                 {/* Username */}
-                <div className="gap-1 py-2 grid">
-                  <Label htmlFor="email">Username</Label>
+                <div className="gap-2 py-2 grid">
+                  <Label htmlFor="username">Username</Label>
                   <Input
                     className={cn({
                       "focus-visible:ring-red-500": errors.username,
@@ -93,16 +93,16 @@ const Page = () => {
                 </div>
 
                 {/* Password */}
-                <div className="gap-1 py-2 grid">
-                  <Label htmlFor="email">Password</Label>
+                <div className="gap-2 py-2 grid">
+                  <Label htmlFor="password">Password</Label>
                   <Input
                     className={cn({
                       "focus-visible:ring-red-500": errors.password,
                     })}
                     placeholder=""
                     value={password}
-                    onChange={(e) => setUsername(e.target.value)}
-                    type="text"
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
                   />
                   {errors?.password && (
                     <p className="text-sm text-red-500">{errors.password}</p>

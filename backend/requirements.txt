@@ -1,3 +1,5 @@
 #Needed pip libraries here
 psycopg
 flask
+python-dotenv
+flask_cors

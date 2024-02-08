@@ -30,7 +30,7 @@ const Page = () => {
 
   return (
     <>
-      <div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
+      <div className="container relative flex p-20 flex-col items-center justify-center lg:px-0">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col items-center space-y-2 text-center">
             <Image
@@ -41,7 +41,7 @@ const Page = () => {
               className="object-cover aspect-square"
             />
 
-            <h1 className="text-2xl font-bold">Create an account</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">Create an account</h1>
 
             <Link
               href="/sign-in"

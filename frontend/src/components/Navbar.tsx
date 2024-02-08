@@ -6,18 +6,20 @@ import { buttonVariants } from "./ui/button";
 import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import MobileNav from "./MobileNav";
 
 const Navbar = () => {
   const user = false;
   const pathname = usePathname();
 
   return (
-    <div className="bg-secondary sticky z-60 top-0 inset-x-0 h-16 shadow-lg">
+    <div className="bg-secondary sticky z-50 top-0 inset-x-0 h-16 shadow-lg">
       <header className="relative bg-secondary">
         <MaxWidthWrapper>
           <div>
             <div className="flex h-16 items-center">
               {/* TODO: MobileNav */}
+              <MobileNav />
 
               <div className="ml-4 flex lg:ml-0">
                 <Link href="/">

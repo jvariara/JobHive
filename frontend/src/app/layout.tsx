@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn, constructMetaData } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,15 +19,15 @@ export default function RootLayout({
         className={cn(
           "relative h-full font-sans antialiased bg-background",
           inter.className,
-          "bg-[url('/Background.png')] bg-no-repeat bg-left-bottom"
+          ""
         )}
       >
         <main className="relative flex flex-col min-h-screen">
           <Navbar />
-          <div className="flex-grow flex-1">
+          <div className="flex-grow flex-1 bg-[url('/Background.png')] bg-no-repeat bg-left-bottom">
             {children}
           </div>
-          {/* Footer */}
+          <Footer />
         </main>
       </body>
     </html>

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import MobileNav from "./MobileNav";
 
 const Navbar = () => {
-  const user = false;
+  const user = true;
   const pathname = usePathname();
 
   return (
@@ -21,7 +21,7 @@ const Navbar = () => {
               {/* TODO: MobileNav */}
               <MobileNav />
 
-              <div className="ml-4 flex lg:ml-0">
+              <div className="ml-4 flex lg:ml-0 items-center">
                 <Link href="/">
                   <Image
                     src="/Logo.png"
@@ -31,6 +31,9 @@ const Navbar = () => {
                     className="object-cover aspect-square"
                   />
                 </Link>
+                <h1 className="text-2xl md:text-3xl font-bold ml-2 text-white">
+                  Job<span className="text-primary">Hive</span>
+                </h1>
               </div>
 
               {/* Right side of navbar */}
@@ -39,46 +42,55 @@ const Navbar = () => {
                   {/* if user is logged out, show "sign in" and "create account" items
                         Otherwise show Home, Search, Jobs, and Profile Picture
                   */}
-                  {user &&
-                    signedInNavbarLinks.map((link) => {
-                      const isActive =
-                        (pathname.includes(link.route) &&
-                          link.route.length > 1) ||
-                        pathname === link.route;
+                  {user
+                    ? signedInNavbarLinks.map((link) => {
+                        const isActive =
+                          (pathname.includes(link.route) &&
+                            link.route.length > 1) ||
+                          pathname === link.route;
 
-                      return (
-                        <Link
-                          href={link.route}
-                          key={link.label}
-                          className={cn(buttonVariants({ variant: "ghost" }), {
-                            "bg-primary text-primary-foreground hover:bg-primary/90":
-                              isActive,
-                          })}
-                        >
-                          <p>{link.label}</p>
-                        </Link>
-                      );
-                    })}
+                        return (
+                          <Link
+                            href={link.route}
+                            key={link.label}
+                            className={cn(
+                              buttonVariants({ variant: "ghost" }),
+                              {
+                                "bg-primary text-primary-foreground hover:bg-primary/90":
+                                  isActive,
+                              }
+                            )}
+                          >
+                            <p>{link.label}</p>
+                          </Link>
+                        );
+                      })
+                    : signedOutNavbarLinks.map((link) => {
+                        const isActive =
+                          (pathname.includes(link.route) &&
+                            link.route.length > 1) ||
+                          pathname === link.route;
 
-                    {!user && signedOutNavbarLinks.map((link) => {
-                      const isActive =
-                        (pathname.includes(link.route) &&
-                          link.route.length > 1) ||
-                        pathname === link.route;
+                        return (
+                          <Link
+                            href={link.route}
+                            key={link.label}
+                            className={cn(
+                              buttonVariants({ variant: "ghost" }),
+                              {
+                                "bg-primary text-primary-foreground hover:bg-primary/90":
+                                  isActive,
+                              }
+                            )}
+                          >
+                            <p>{link.label}</p>
+                          </Link>
+                        );
+                      })}
 
-                      return (
-                        <Link
-                          href={link.route}
-                          key={link.label}
-                          className={cn(buttonVariants({ variant: "ghost" }), {
-                            "bg-primary text-primary-foreground hover:bg-primary/90":
-                              isActive,
-                          })}
-                        >
-                          <p>{link.label}</p>
-                        </Link>
-                      );
-                    })}
+                  {user && (
+                    <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+                  )}
                 </div>
               </div>
             </div>

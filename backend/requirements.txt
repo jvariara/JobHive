@@ -3,3 +3,4 @@ psycopg
 flask
 python-dotenv
 flask_cors
+authlib

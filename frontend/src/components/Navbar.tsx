@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import MobileNav from "./MobileNav";
 
 const Navbar = () => {
-  const user = true;
+  const user = false;
   const pathname = usePathname();
 
   return (

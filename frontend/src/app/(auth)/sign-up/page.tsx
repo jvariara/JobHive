@@ -6,13 +6,19 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import axios from "axios";
+import { UserValidator } from "@/lib/validations/user-validator";
+import { toast } from "sonner";
+import { ZodError } from "zod";
 
 const Page = () => {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const router = useRouter();
 
   const [errors, setErrors] = useState({
     email: "",
@@ -20,12 +26,51 @@ const Page = () => {
     password: "",
   });
 
-  const searchParams = useSearchParams();
-  // used for redirecting when user signs in but came from somewhere else in the app
-  const origin = searchParams.get("origin");
-
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setErrors({
+      email: "",
+      username: "",
+      password: "",
+    });
+
+    const userData = { email, username, password };
+
+    try {
+      UserValidator.parse(userData);
+
+      // if validation succeeds, submit data to backend
+      fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ username, email, password }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "success") {
+            toast.success(
+              "Successfully created an account! Sign in now to use JobHive"
+            );
+            router.push("/sign-in");
+          } else {
+            // error
+            setErrorMessage(data.error);
+          }
+        })
+        .catch((err: any) => {
+          throw new Error(err.message);
+        });
+        
+    } catch (error) {
+      if (error instanceof ZodError) {
+        console.log(error);
+      } else {
+        throw new Error("Error creating an account. Please try again");
+      }
+    }
   };
 
   return (
@@ -41,7 +86,9 @@ const Page = () => {
               className="object-cover aspect-square"
             />
 
-            <h1 className="text-2xl sm:text-3xl font-bold">Create an account</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">
+              Create an account
+            </h1>
 
             <Link
               href="/sign-in"

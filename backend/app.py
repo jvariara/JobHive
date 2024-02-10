@@ -25,7 +25,7 @@ def app_obj():
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['DEBUG'] = os.getenv('DEBUG', False)
         
-    CORS(app)
+    CORS(app, supports_credentials=True, resources={r"/auth/*": {"origins": "http://localhost:3000"}})
     
     return app
 

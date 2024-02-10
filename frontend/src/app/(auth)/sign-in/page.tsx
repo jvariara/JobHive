@@ -4,14 +4,19 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
+import { ZodError } from "zod";
 
 const Page = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const router = useRouter();
 
   const [errors, setErrors] = useState({
     username: "",
@@ -22,8 +27,29 @@ const Page = () => {
   // used for redirecting when user signs in but came from somewhere else in the app
   const origin = searchParams.get("origin");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    const userData = { username, password };
+
+    try {
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_API_URL + "/auth/sign-in"
+      );
+      const data = response.data;
+      if (data.status === "success") {
+        toast.success("Successfully signed in!");
+        router.push("/");
+      } else {
+        setErrorMessage(data.error);
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        console.log(error);
+      } else {
+        throw new Error("Error creating account.");
+      }
+    }
   };
 
   return (
@@ -39,7 +65,9 @@ const Page = () => {
               className="object-cover aspect-square"
             />
 
-            <h1 className="text-2xl sm:text-3xl font-bold">Sign in to your account</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">
+              Sign in to your account
+            </h1>
 
             <Link
               href="/sign-up"
@@ -56,7 +84,6 @@ const Page = () => {
           <div>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-2">
-
                 {/* Username */}
                 <div className="gap-2 py-2 grid">
                   <Label htmlFor="username">Username</Label>
@@ -69,9 +96,6 @@ const Page = () => {
                     onChange={(e) => setUsername(e.target.value)}
                     type="text"
                   />
-                  {errors?.username && (
-                    <p className="text-sm text-red-500">{errors.username}</p>
-                  )}
                 </div>
 
                 {/* Password */}
@@ -86,9 +110,6 @@ const Page = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     type="password"
                   />
-                  {errors?.password && (
-                    <p className="text-sm text-red-500">{errors.password}</p>
-                  )}
                 </div>
 
                 <Button className="">Sign In</Button>

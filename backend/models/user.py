@@ -33,6 +33,10 @@ class Users(db.Model):
     def find_by_username(cls, username):
         return cls.query.filter_by(username=username).first()
     
+    @classmethod
+    def find_by_email(cls, email):
+        return cls.query.filter_by(email=email).first()
+    
     def check_password(self, password):
         return (check_password_hash(self.password, password))
     

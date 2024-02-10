@@ -1,21 +1,35 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from models.user import Users
 from password_validator import PasswordValidator
+import jwt
+import datetime
 
 auth_controller = Blueprint('auth_controller', __name__)
+
+# TODO: MOVE TO .env FILE
+SECRET_KEY="secret_key"
 
 @auth_controller.route('/sign-in', methods=['POST'])
 def sign_in():
     req = request.json
     res = {
         'status': '',
-        'error': ''
+        'error': '',
+        'token': None
     }
     try:
         user = Users.find_by_username(username=req['username'])
         print(user)
         if user and Users.check_password(user, req['password']):
+            # Generate JWT
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1), # token expires in 1 day
+                'iat': datetime.datetime.utcnow(),
+                'sub': user.username # User user identifier
+            }
+            token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
             res['status'] = 'success'
+            res['token'] = token.decode('UTF-8')
         else:
             raise Exception("The username or password credentials are incorrect")
     except Exception as init:

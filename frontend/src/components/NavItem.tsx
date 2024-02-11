@@ -18,7 +18,7 @@ const NavItem = () => {
       const response = await fetchUserSession();
       setUser(response.user);
     })();
-  }, []);
+  }, [localStorage.getItem('token')]);
 
   return (
     <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">

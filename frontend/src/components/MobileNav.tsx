@@ -18,7 +18,7 @@ const MobileNav = () => {
       const response = await fetchUserSession();
       setUser(response.user);
     })();
-  }, []);
+  }, [localStorage.getItem('token')]);
 
   // whenever we click an item in the menu and navigate away, we want to close the menu
   useEffect(() => {

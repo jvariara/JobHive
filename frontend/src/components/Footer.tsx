@@ -18,7 +18,7 @@ const Footer = () => {
       const response = await fetchUserSession();
       setUser(response.user);
     })();
-  }, []);
+  }, [localStorage.getItem('token')]);
 
   const pathsToMinimize = ["/sign-up", "/sign-in"];
 

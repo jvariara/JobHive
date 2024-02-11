@@ -1,19 +1,26 @@
+"use client";
 import { User } from "@/types/user";
 import Link from "next/link";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 const UserAccountNav = ({ user }: { user: User }) => {
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/sign-in");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="overflow-visible">
-        <div className="h-12 w-12 bg-gray-200 rounded-full cursor-pointer">
-        </div>
+        <div className="h-12 w-12 bg-gray-200 rounded-full cursor-pointer"></div>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="bg-secondary w-60" align="end">
@@ -27,15 +34,17 @@ const UserAccountNav = ({ user }: { user: User }) => {
         <DropdownMenuSeparator className="bg-primary" />
 
         <DropdownMenuItem asChild className="hover:bg-background/60">
-            <Link className="cursor-pointer" href={`/profile/${user?.username}`}>
-                Profile
-            </Link>
+          <Link className="cursor-pointer" href={`/profile/${user?.username}`}>
+            Profile
+          </Link>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="cursor-pointer hover:bg-background/60">
-            Log out
+        <DropdownMenuItem
+          className="cursor-pointer hover:bg-background/60"
+          onClick={handleLogout}
+        >
+          Log out
         </DropdownMenuItem>
-
       </DropdownMenuContent>
     </DropdownMenu>
   );

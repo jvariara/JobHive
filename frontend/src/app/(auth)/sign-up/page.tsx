@@ -49,7 +49,6 @@ const Page = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.status === "success") {
             toast.success(
               "Successfully created an account! Sign in now to use JobHive"

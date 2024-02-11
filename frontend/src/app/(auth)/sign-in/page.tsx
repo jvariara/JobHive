@@ -34,7 +34,6 @@ const Page = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.status === "success") {
             toast.success("Successfully logged in!");
             router.push("/");

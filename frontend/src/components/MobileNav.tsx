@@ -4,14 +4,14 @@ import { fetchUserSession } from "@/lib/fetch-user";
 import { User } from "@/types/user";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const MobileNav = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-
   const pathname = usePathname();
+  const router = useRouter()
 
   useEffect(() => {
     (async () => {
@@ -38,6 +38,11 @@ const MobileNav = () => {
     if (isOpen) document.body.classList.add("overflow-hidden");
     else document.body.classList.remove("overflow-hidden");
   }, [isOpen]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/sign-in");
+  }
 
   if (!isOpen)
     return (
@@ -96,7 +101,7 @@ const MobileNav = () => {
                   </div>
                   <div className="flow-root border-t border- pt-6">
                     <Link
-                      onClick={() => closeOnCurrent("/sign-in")}
+                      onClick={handleLogout}
                       href="/sign-in"
                       className="-m-2 block p-2 font-medium text-white text-3xl hover:text-primary transition-all duration-200 ease-in"
                     >

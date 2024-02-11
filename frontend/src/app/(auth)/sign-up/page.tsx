@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { UserValidator } from "@/lib/validations/user-validator";
 import { toast } from "sonner";
-import { ZodError } from "zod";
+import { ZodError, z } from "zod";
 
 const Page = () => {
   const [email, setEmail] = useState<string>("");
@@ -50,6 +50,7 @@ const Page = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data.status === "success") {
             toast.success(
               "Successfully created an account! Sign in now to use JobHive"
@@ -63,10 +64,24 @@ const Page = () => {
         .catch((err: any) => {
           throw new Error(err.message);
         });
-        
     } catch (error) {
-      if (error instanceof ZodError) {
-        console.log(error);
+      if (error instanceof z.ZodError) {
+        // Initialize an object to accumulate errors
+        const newErrors = { email: "", username: "", password: "" };
+
+        // Iterate over the error.details array
+        error.issues.forEach((issue) => {
+          // Use the issue.path array to get the field name (e.g., "email", "username", "password")
+          const fieldName = issue.path[0];
+          // Update the newErrors object with the message for this field
+          // Note: This will overwrite any previous message for the field
+          // If you want to append errors, you could concatenate strings or use an array
+          // @ts-ignore
+          newErrors[fieldName] = issue.message;
+        });
+
+        // Update the state with the new errors
+        setErrors(newErrors);
       } else {
         throw new Error("Error creating an account. Please try again");
       }
@@ -101,7 +116,13 @@ const Page = () => {
             </Link>
           </div>
 
-          {/* Sign In form */}
+          {errorMessage && (
+            <p className="text-red-500 text-center font-semibold text-md">
+              {errorMessage}
+            </p>
+          )}
+
+          {/* Sign Up form */}
           <div>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-2">

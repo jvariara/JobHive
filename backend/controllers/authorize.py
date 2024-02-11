@@ -44,7 +44,7 @@ def sign_in():
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1), # token expires in 1 day
                 'iat': datetime.datetime.utcnow(),
-                'sub': user['username'] # User user identifier
+                'sub': user.username # User user identifier
             }
             token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
             res['status'] = 'success'

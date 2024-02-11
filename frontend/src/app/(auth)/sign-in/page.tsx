@@ -33,22 +33,30 @@ const Page = () => {
     const userData = { username, password };
 
     try {
-      const response = await axios.post(
-        process.env.NEXT_PUBLIC_API_URL + "/auth/sign-in"
-      );
-      const data = response.data;
-      if (data.status === "success") {
-        toast.success("Successfully signed in!");
-        router.push("/");
-      } else {
-        setErrorMessage(data.error);
-      }
+      fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/sign-in", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.status === "success") {
+            toast.success("Successfully logged in!");
+            router.push("/");
+            // save token in local storage
+            localStorage.setItem("token", data.token);
+          } else {
+            setErrorMessage(data.error);
+          }
+        })
+        .catch((err: any) => {
+          throw new Error(err.message);
+        });
     } catch (error) {
-      if (error instanceof ZodError) {
-        console.log(error);
-      } else {
-        throw new Error("Error creating account.");
-      }
+      throw new Error("Error signing in. Please try again.");
     }
   };
 
@@ -79,6 +87,12 @@ const Page = () => {
               Don&apos;t have an account? Sign up now! &rarr;
             </Link>
           </div>
+
+          {errorMessage && (
+            <p className="text-red-500 text-center font-semibold text-md">
+              {errorMessage}
+            </p>
+          )}
 
           {/* Sign In form */}
           <div>

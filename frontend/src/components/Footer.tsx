@@ -1,24 +1,13 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import MaxWidthWrapper from "./MaxWidthWrapper";
+import { signedInNavbarLinks } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
-import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
-import { useEffect, useState } from "react";
-import { fetchUserSession } from "@/lib/fetch-user";
-import { User } from "@/types/user";
+import { usePathname } from "next/navigation";
+import MaxWidthWrapper from "./MaxWidthWrapper";
 
 const Footer = () => {
   const pathname = usePathname();
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const response = await fetchUserSession();
-      setUser(response.user);
-    })();
-  }, [localStorage.getItem('token')]);
 
   const pathsToMinimize = ["/sign-up", "/sign-in"];
 
@@ -77,25 +66,15 @@ const Footer = () => {
 
           <div className="mt-4 flex items-center justify-center md:mt-0">
             <div className="flex space-x-8">
-              {user
-                ? signedInNavbarLinks.map((link) => (
-                    <Link
-                      href={link.route}
-                      className="text-sm text-muted-foreground hover:text-gray-900"
-                      key={link.label}
-                    >
-                      {link.label}
-                    </Link>
-                  ))
-                : signedOutNavbarLinks.map((link) => (
-                    <Link
-                      href={link.route}
-                      className="text-sm text-muted-foreground hover:text-gray-900"
-                      key={link.label}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+              {signedInNavbarLinks.map((link) => (
+                <Link
+                  href={link.route}
+                  className="text-sm text-muted-foreground hover:text-gray-900"
+                  key={link.label}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

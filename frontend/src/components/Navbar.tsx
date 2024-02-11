@@ -1,16 +1,10 @@
-"use client";
+import Image from "next/image";
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
-import Image from "next/image";
-import { buttonVariants } from "./ui/button";
-import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import MobileNav from "./MobileNav";
+import NavItem from "./NavItem";
 
-const Navbar = () => {
-  const user = false;
-  const pathname = usePathname();
+const Navbar = async () => {
 
   return (
     <div className="bg-secondary sticky z-50 top-0 inset-x-0 h-16 shadow-lg">
@@ -18,7 +12,6 @@ const Navbar = () => {
         <MaxWidthWrapper>
           <div>
             <div className="flex h-16 items-center">
-              {/* TODO: MobileNav */}
               <MobileNav />
 
               <div className="ml-4 flex lg:ml-0 items-center">
@@ -38,60 +31,7 @@ const Navbar = () => {
 
               {/* Right side of navbar */}
               <div className="ml-auto flex items-center">
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {/* if user is logged out, show "sign in" and "create account" items
-                        Otherwise show Home, Search, Jobs, and Profile Picture
-                  */}
-                  {user
-                    ? signedInNavbarLinks.map((link) => {
-                        const isActive =
-                          (pathname.includes(link.route) &&
-                            link.route.length > 1) ||
-                          pathname === link.route;
-
-                        return (
-                          <Link
-                            href={link.route}
-                            key={link.label}
-                            className={cn(
-                              buttonVariants({ variant: "ghost" }),
-                              {
-                                "bg-primary text-primary-foreground hover:bg-primary/90":
-                                  isActive,
-                              }
-                            )}
-                          >
-                            <p>{link.label}</p>
-                          </Link>
-                        );
-                      })
-                    : signedOutNavbarLinks.map((link) => {
-                        const isActive =
-                          (pathname.includes(link.route) &&
-                            link.route.length > 1) ||
-                          pathname === link.route;
-
-                        return (
-                          <Link
-                            href={link.route}
-                            key={link.label}
-                            className={cn(
-                              buttonVariants({ variant: "ghost" }),
-                              {
-                                "bg-primary text-primary-foreground hover:bg-primary/90":
-                                  isActive,
-                              }
-                            )}
-                          >
-                            <p>{link.label}</p>
-                          </Link>
-                        );
-                      })}
-
-                  {user && (
-                    <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
-                  )}
-                </div>
+                <NavItem />
               </div>
             </div>
           </div>

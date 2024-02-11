@@ -1,6 +1,7 @@
 "use client";
 
 import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
+import { fetchUserSession } from "@/lib/fetch-user";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,9 +9,16 @@ import { useEffect, useState } from "react";
 
 const MobileNav = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [user, setUser] = useState(null);
 
   const pathname = usePathname();
-  const user = true;
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetchUserSession();
+      setUser(response.user);
+    })();
+  }, []);
 
   // whenever we click an item in the menu and navigate away, we want to close the menu
   useEffect(() => {

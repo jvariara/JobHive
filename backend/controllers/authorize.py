@@ -1,3 +1,4 @@
+import json
 from flask import Blueprint, request, jsonify
 from models.user import Users
 from password_validator import PasswordValidator
@@ -44,7 +45,7 @@ def sign_in():
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1), # token expires in 1 day
                 'iat': datetime.datetime.utcnow(),
-                'sub': user.username # User user identifier
+                'sub': user.id # Unique user identifier
             }
             token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
             res['status'] = 'success'
@@ -83,6 +84,16 @@ def register():
         res['status'] = 'error'
         res['error'] = inst.args[0]
     return jsonify(res)
+
+@auth_controller.route('/get-session', methods=["GET"])
+@token_required
+def get_user_session(current_user):
+    user = Users.find_by_id(id=current_user)
+    print(user)
+    if user:
+        return jsonify({ 'user': user.to_dict()})
+    else:
+        return jsonify({ 'error': "User not found" }), 404
 
 def validate_password(password):  
     schema = PasswordValidator()

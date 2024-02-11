@@ -3,25 +3,17 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ZodError } from "zod";
 
 const Page = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
-
-  const [errors, setErrors] = useState({
-    username: "",
-    password: "",
-  });
 
   const searchParams = useSearchParams();
   // used for redirecting when user signs in but came from somewhere else in the app
@@ -102,9 +94,6 @@ const Page = () => {
                 <div className="gap-2 py-2 grid">
                   <Label htmlFor="username">Username</Label>
                   <Input
-                    className={cn({
-                      "focus-visible:ring-red-500": errors.username,
-                    })}
                     placeholder=""
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -116,9 +105,6 @@ const Page = () => {
                 <div className="gap-2 py-2 grid">
                   <Label htmlFor="password">Password</Label>
                   <Input
-                    className={cn({
-                      "focus-visible:ring-red-500": errors.password,
-                    })}
                     placeholder=""
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

@@ -4,14 +4,13 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { UserValidator } from "@/lib/validations/user-validator";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { UserValidator } from "@/lib/validations/user-validator";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
-import { ZodError, z } from "zod";
+import { z } from "zod";
 
 const Page = () => {
   const [email, setEmail] = useState<string>("");

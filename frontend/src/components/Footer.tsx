@@ -5,11 +5,19 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 import Image from "next/image";
 import Link from "next/link";
 import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
+import { useEffect, useState } from "react";
+import { fetchUserSession } from "@/lib/fetch-user";
 
 const Footer = () => {
   const pathname = usePathname();
+  const [user, setUser] = useState(null);
 
-  const user = false;
+  useEffect(() => {
+    (async () => {
+      const response = await fetchUserSession();
+      setUser(response.user);
+    })();
+  }, []);
 
   const pathsToMinimize = ["/sign-up", "/sign-in"];
 

@@ -36,10 +36,23 @@ class Users(db.Model):
     @classmethod
     def find_by_email(cls, email):
         return cls.query.filter_by(email=email).first()
+
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.filter_by(id=id).first()
     
     def check_password(self, password):
         return (check_password_hash(self.password, password))
     
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'display_name': self.display_name,
+            'created_at': self.created_at.isoformat(),
+            'last_login': self.last_login.isoformat() if self.last_login else None,
+        }
     # def save_to_db(self):
     #     insert_query = sql.SQL("""
     #         INSERT INTO users (username, email, password),

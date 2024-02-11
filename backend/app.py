@@ -1,10 +1,9 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from config import load_string
 from dotenv import load_dotenv
 import os
 from flask_cors import CORS
-from models.user import init_app
+from db import init_app
 
 
 
@@ -24,7 +23,6 @@ def app_obj():
     app.config['ENV'] = os.getenv('FLASK_ENV')
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['DEBUG'] = os.getenv('DEBUG', False)
-        
     CORS(app)
     
     return app

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { buttonVariants } from "./ui/button";
+import UserAccountNav from "./UserAccountNav";
 
 const NavItem = () => {
   const pathname = usePathname();
@@ -17,10 +18,6 @@ const NavItem = () => {
       setUser(response.user);
     })();
   }, []);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
@@ -61,7 +58,7 @@ const NavItem = () => {
               </Link>
             );
           })}
-      {user && <div className="h-12 w-12 bg-gray-200 rounded-full"></div>}
+      {user && <UserAccountNav user={user} />}
     </div>
   );
 };

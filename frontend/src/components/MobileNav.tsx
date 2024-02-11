@@ -1,7 +1,7 @@
 "use client";
-
 import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
 import { fetchUserSession } from "@/lib/fetch-user";
+import { User } from "@/types/user";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 const MobileNav = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const pathname = usePathname();
 
@@ -70,7 +70,7 @@ const MobileNav = () => {
             </div>
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6 flex flex-col justify-between h-full">
-              {!user ? (
+              {user ? (
                 <>
                   <div className="space-y-12">
                     {signedInNavbarLinks.map((link) => (
@@ -84,6 +84,15 @@ const MobileNav = () => {
                         </Link>
                       </div>
                     ))}
+                    <div className="flow-root">
+                      <Link
+                        onClick={() => closeOnCurrent(`/profile/${user.username}`)}
+                        href={`/profile/${user.username}`}
+                        className="-m-2 block p-2 font-medium text-white text-3xl hover:text-primary transition-all duration-200 ease-in"
+                      >
+                        Profile
+                      </Link>
+                    </div>
                   </div>
                   <div className="flow-root border-t border- pt-6">
                     <Link

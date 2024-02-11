@@ -7,7 +7,3 @@ export interface User {
   created_at: Date;
   last_login?: Date; // Optional since it may not always be set
 }
-
-export interface FetchUserSessionResponse {
-  user: User | null;
-}

@@ -1,5 +1,5 @@
 import { User } from "@/types/user";
-import { Button } from "./ui/button";
+import Link from "next/link";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -7,7 +7,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import Link from "next/link";
 
 const UserAccountNav = ({ user }: { user: User }) => {
   return (

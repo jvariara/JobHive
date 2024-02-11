@@ -1,8 +1,10 @@
 "use client";
 
+import { User } from "@/types/user";
+
 // Define the TypeScript interface for the response
 interface FetchUserSessionResponse {
-  user: any | null; // Replace 'any' with your actual user type
+  user: User | null; // Replace 'any' with your actual user type
 }
 
 export const fetchUserSession = async (): Promise<FetchUserSessionResponse> => {

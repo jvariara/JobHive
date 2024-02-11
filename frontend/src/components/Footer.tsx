@@ -7,10 +7,11 @@ import Link from "next/link";
 import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
 import { useEffect, useState } from "react";
 import { fetchUserSession } from "@/lib/fetch-user";
+import { User } from "@/types/user";
 
 const Footer = () => {
   const pathname = usePathname();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     (async () => {

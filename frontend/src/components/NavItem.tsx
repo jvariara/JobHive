@@ -7,10 +7,11 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { buttonVariants } from "./ui/button";
 import UserAccountNav from "./UserAccountNav";
+import { User } from "@/types/user";
 
 const NavItem = () => {
   const pathname = usePathname();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     (async () => {

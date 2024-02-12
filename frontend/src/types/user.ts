@@ -3,6 +3,6 @@ export interface User {
   username: string;
   email: string;
   display_name: string;
-  created_at: Date;
+  created_at?: Date;
   last_login?: Date; // Optional since it may not always be set
 }

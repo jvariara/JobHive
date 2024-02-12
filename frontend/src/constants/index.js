@@ -23,3 +23,9 @@ export const signedOutNavbarLinks = [
     label: "Create Account",
   },
 ];
+
+export const profileTabs = [
+  { value: "posts", label: "Posts" },
+  { value: "applied_jobs", label: "Applied Jobs" },
+  { value: "saved_jobs", label: "Saved Jobs" },
+];

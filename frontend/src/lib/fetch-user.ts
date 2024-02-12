@@ -7,7 +7,7 @@ interface FetchUserSessionResponse {
   user: User | null; // Replace 'any' with your actual user type
 }
 
-export const fetchUserSession = async (): Promise<FetchUserSessionResponse> => {
+const fetchUserSession = async (): Promise<FetchUserSessionResponse> => {
   const token = localStorage.getItem("token");
   if (!token) {
     return { user: null };
@@ -32,3 +32,5 @@ export const fetchUserSession = async (): Promise<FetchUserSessionResponse> => {
     return { user: null };
   }
 };
+
+export { fetchUserSession }

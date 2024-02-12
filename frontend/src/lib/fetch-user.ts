@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { User } from "@/types/user";
 
 // Define the TypeScript interface for the response
@@ -8,17 +7,10 @@ interface FetchUserSessionResponse {
 }
 
 const fetchUserSession = async (): Promise<FetchUserSessionResponse> => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    return { user: null };
-  }
-
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/get-session`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      credentials: "include"
     });
 
     if (!response.ok) {

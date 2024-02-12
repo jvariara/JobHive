@@ -1,5 +1,6 @@
 "use client";
 import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
+import { useUser } from "@/context/UserContext";
 import { fetchUserSession } from "@/lib/fetch-user";
 import { User } from "@/types/user";
 import { Menu, X } from "lucide-react";
@@ -11,14 +12,16 @@ const MobileNav = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const pathname = usePathname();
-  const router = useRouter()
+  const router = useRouter();
+  // @ts-ignore
+  const { setLoggedIn } = useUser();
 
   useEffect(() => {
     (async () => {
       const response = await fetchUserSession();
       setUser(response.user);
     })();
-  }, [localStorage.getItem('token')]);
+  }, []);
 
   // whenever we click an item in the menu and navigate away, we want to close the menu
   useEffect(() => {
@@ -39,10 +42,25 @@ const MobileNav = () => {
     else document.body.classList.remove("overflow-hidden");
   }, [isOpen]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/sign-in");
-  }
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/logout`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        router.push("/sign-in");
+        setLoggedIn(false);
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   if (!isOpen)
     return (
@@ -91,7 +109,9 @@ const MobileNav = () => {
                     ))}
                     <div className="flow-root">
                       <Link
-                        onClick={() => closeOnCurrent(`/profile/${user.username}`)}
+                        onClick={() =>
+                          closeOnCurrent(`/profile/${user.username}`)
+                        }
                         href={`/profile/${user.username}`}
                         className="-m-2 block p-2 font-medium text-white text-3xl hover:text-primary transition-all duration-200 ease-in"
                       >

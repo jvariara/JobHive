@@ -1,24 +1,17 @@
 "use client";
 import { signedInNavbarLinks, signedOutNavbarLinks } from "@/constants";
-import { fetchUserSession } from "@/lib/fetch-user";
+import { useUser } from "@/context/UserContext";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { buttonVariants } from "./ui/button";
 import UserAccountNav from "./UserAccountNav";
-import { User } from "@/types/user";
+import { buttonVariants } from "./ui/button";
 
 const NavItem = () => {
   const pathname = usePathname();
-  const [user, setUser] = useState<User | null>(null);
+  // @ts-ignore
+  const { user } = useUser()
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetchUserSession();
-      setUser(response.user);
-    })();
-  }, [localStorage.getItem('token')]);
 
   return (
     <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">

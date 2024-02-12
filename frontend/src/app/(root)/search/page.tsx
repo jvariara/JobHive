@@ -21,7 +21,7 @@ const Page = ({
       if (!response.user) redirect("/sign-in");
       setUser(response.user);
     })();
-  }, [localStorage.getItem("token")]);
+  }, []);
 
   return (
     <MaxWidthWrapper>

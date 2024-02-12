@@ -100,7 +100,7 @@ const Page = ({
       if (!response.user) redirect("/sign-in");
       setUser(response.user);
     })();
-  }, [localStorage.getItem("token")]);
+  }, []);
 
   const filterJobs = (filter: string) => {
     // Use a copy of allJobs to apply filters

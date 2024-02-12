@@ -3,6 +3,7 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -30,17 +31,16 @@ const Page = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(userData),
+        credentials: "include",
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "success") {
             toast.success("Successfully logged in!");
-            router.push("/");
-            // save token in local storage
-            localStorage.setItem("token", data.token);
+            router.push(origin || "/");
           } else {
-            setErrorMessage(data.error);
+            setErrorMessage(data.error || "An error occurred during login.");
           }
         })
         .catch((err: any) => {

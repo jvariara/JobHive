@@ -1,20 +1,22 @@
+"use client";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants";
-import { fetchUserSession } from "@/lib/fetch-user";
+import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 
-const Page = async({ params }: { params: { slug: string } }) => {
+const Page = ({ params }: { params: { slug: string } }) => {
   const otheruser = {
     id: 1,
-    username: "Justin",
+    username: "patrick",
     email: "jvariara@gmail.com",
     display_name: "Justin",
     bio: "Random text here for a bio section",
   };
 
-  const { user } = await fetchUserSession()
+  // @ts-ignore
+  const { user } = useUser();
 
   return (
     <MaxWidthWrapper>
@@ -55,10 +57,17 @@ const Page = async({ params }: { params: { slug: string } }) => {
             <p className="text-muted-foreground w-full">{otheruser.bio}</p>
             {/* Buttons */}
             {/* TODO: Set these dynamically based of if the otheruser profile we are viewing is the one logged in or not */}
-            <div className="flex gap-x-8">
-              <Button>Edit Profile</Button>
-              <Button>Share Profile</Button>
-            </div>
+            {user?.username === otheruser?.username ? (
+              <div className="flex gap-x-8">
+                <Button>Edit Profile</Button>
+                <Button>Share Profile</Button>
+              </div>
+            ) : (
+              <div className="flex gap-x-8">
+                <Button>Follow</Button>
+                <Button>Settings</Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

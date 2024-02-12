@@ -9,12 +9,31 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 const UserAccountNav = ({ user }: { user: User }) => {
   const router = useRouter();
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/sign-in");
+  // @ts-ignore
+  const { setLoggedIn } = useUser()
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/logout`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      if (response.ok) {
+        router.push("/sign-in");
+        setLoggedIn(false)
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   return (

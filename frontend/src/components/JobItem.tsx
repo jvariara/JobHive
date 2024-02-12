@@ -18,7 +18,7 @@ const JobItem = ({ job }: JobItemProps) => {
         </p>
       </div>
 
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-4 flex-col sm:flex-row gap-y-4 sm:gap-y-0">
         <Link href={job.url} className={buttonVariants()} target="_blank">
           View
         </Link>

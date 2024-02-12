@@ -9,11 +9,11 @@ interface UserItemProps {
 const UserItem = ({ user }: UserItemProps) => {
   return (
     <div className="px-8 py-4 bg-secondary rounded-lg flex items-center justify-between">
-      <div className="flex items-center gap-x-6">
+      <div className="flex items-center gap-x-4 md:gap-x-6">
         {/* TODO: Replace with profile picture */}
-        <div className="h-16 w-16 bg-primary rounded-full"></div>
+        <div className="h-12 w-12 md:h-16 md:w-16 bg-primary rounded-full"></div>
         <div className="flex flex-col items-start gap-y-1">
-          <h1 className="text-3xl font-semibold">{user.display_name}</h1>
+          <h1 className="text-2xl md:text-3xl font-semibold">{user.display_name}</h1>
           <h3 className="text-primary text-base">@{user.username}</h3>
         </div>
       </div>

@@ -57,6 +57,32 @@ export const samplePosts = [
     createdAt: "2024-02-11 00:03:52",
     comments: [],
   },
+  {
+    id: "3",
+    parentId: null,
+    content: "Just got an offer from nvidia!!",
+    author: {
+      name: "Patrick M",
+      image: "",
+      id: "2",
+      username: "patrick",
+    },
+    createdAt: "2024-02-11 00:03:52",
+    comments: [],
+  },
+  {
+    id: "4",
+    parentId: null,
+    content: "Just got an offer from nvidia!!",
+    author: {
+      name: "Patrick M",
+      image: "",
+      id: "2",
+      username: "patrick",
+    },
+    createdAt: "2024-02-11 00:03:52",
+    comments: [],
+  },
 ];
 
 export const sampleJobs = [

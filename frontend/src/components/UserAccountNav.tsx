@@ -10,11 +10,12 @@ import {
 } from "./ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
+import Image from "next/image";
 
 const UserAccountNav = ({ user }: { user: User }) => {
   const router = useRouter();
   // @ts-ignore
-  const { setLoggedIn } = useUser()
+  const { setLoggedIn } = useUser();
 
   const handleLogout = async () => {
     try {
@@ -27,7 +28,7 @@ const UserAccountNav = ({ user }: { user: User }) => {
       );
       if (response.ok) {
         router.push("/sign-in");
-        setLoggedIn(false)
+        setLoggedIn(false);
       } else {
         console.error("Logout failed");
       }
@@ -39,7 +40,16 @@ const UserAccountNav = ({ user }: { user: User }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="overflow-visible">
-        <div className="h-12 w-12 bg-gray-200 rounded-full cursor-pointer"></div>
+        {/* TODO: replace with profile picture */}
+        <div className="cursor-pointer">
+          <Image
+            src="/default_pfp.jpg"
+            alt="profile picture"
+            className="object-contain aspect-square object-center rounded-full"
+            width={50}
+            height={50}
+          />
+        </div>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="bg-secondary w-60" align="end">

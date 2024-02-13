@@ -14,13 +14,17 @@ import {
 
 interface JobItemProps {
   job: Job;
-  location: "saved" | "applied" | "jobs";
+  location: "saved" | "applied" | "jobs" | "feed";
 }
 
 const JobItem = ({ job, location }: JobItemProps) => {
   return (
-    <div className="px-8 py-4 bg-secondary rounded-lg flex items-center justify-between">
-      <div className="flex flex-col gap-y-1">
+    <div
+      className={`py-4 bg-secondary rounded-lg flex items-center justify-between ${
+        location !== "feed" && "px-8"
+      }`}
+    >
+      <div className="flex flex-col gap-y-1 w-1/2">
         <h1 className="text-2xl font-semibold">{job.company}</h1>
         <h4 className="text-primary">{job.title}</h4>
         <p>{job?.location}</p>
@@ -29,7 +33,7 @@ const JobItem = ({ job, location }: JobItemProps) => {
         </p>
       </div>
 
-      {location === "jobs" || location === "applied" ? (
+      {location !== "applied" ? (
         <div className="flex gap-x-4 flex-col sm:flex-row gap-y-4 sm:gap-y-0">
           <Link href={job.url} className={buttonVariants()} target="_blank">
             View

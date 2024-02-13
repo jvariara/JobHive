@@ -3,17 +3,30 @@ import JobItem from "@/components/JobItem";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Post from "@/components/Post";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs, sampleJobs, samplePosts } from "@/constants";
 import { useUser } from "@/context/UserContext";
 import { Job } from "@/types/job";
+import { Copy } from "lucide-react";
 import Image from "next/image";
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const otheruser = {
     id: 1,
-    username: "patrick",
-    email: "jvariara@gmail.com",
+    username: "Justin",
+    email: "patrick@gmail.com",
     display_name: "Justin",
     bio: "Random text here for a bio section",
   };
@@ -62,8 +75,83 @@ const Page = ({ params }: { params: { slug: string } }) => {
             {/* TODO: Set these dynamically based of if the otheruser profile we are viewing is the one logged in or not */}
             {user?.username === otheruser?.username ? (
               <div className="flex gap-x-8">
-                <Button>Edit Profile</Button>
-                <Button>Share Profile</Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>Edit Profile</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[500px]">
+                    <DialogHeader>
+                      <DialogTitle>Edit Profile</DialogTitle>
+                      <DialogDescription>
+                        Make changes to your profile here. Click save when
+                        you&apos;re done.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="display_name" className="text-right">
+                          Display Name
+                        </Label>
+                        <Input
+                          id="display_name"
+                          defaultValue={user.display_name}
+                          className="col-span-3"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="username" className="text-right">
+                          Username
+                        </Label>
+                        <Input
+                          id="username"
+                          defaultValue={`${user.username}`}
+                          className="col-span-3"
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit">Save changes</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>Share Profile</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Share link</DialogTitle>
+                      <DialogDescription>
+                        Anyone who has this link will be able to view this.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex items-center space-x-2">
+                      <div className="grid flex-1 gap-2">
+                        <Label htmlFor="link" className="sr-only">
+                          Link
+                        </Label>
+                        <Input
+                          id="link"
+                          // TODO: Update URL to live url
+                          defaultValue={`http://localhost:3000/profile/${user?.username}`}
+                          readOnly
+                        />
+                      </div>
+                      {/* TODO: Make this copy to users clipboard */}
+                      <Button type="submit" size="sm" className="px-3">
+                        <span className="sr-only">Copy</span>
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <DialogFooter className="sm:justify-start">
+                      <DialogClose asChild>
+                        <Button type="button" variant="secondary">
+                          Close
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             ) : (
               <div className="flex gap-x-8">

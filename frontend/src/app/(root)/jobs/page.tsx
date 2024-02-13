@@ -153,7 +153,7 @@ const Page = ({
       {/* Job items */}
       <div className="flex flex-col gap-y-6 mb-6">
         {jobs
-          ? jobs.map((job) => <JobItem job={job as Job} key={job.id} />)
+          ? jobs.map((job) => <JobItem location="jobs" job={job as Job} key={job.id} />)
           : null}
       </div>
     </MaxWidthWrapper>

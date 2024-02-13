@@ -39,7 +39,7 @@ export const samplePosts = [
       name: "Justin",
       image: "",
       id: "1",
-      username: "Justin"
+      username: "Justin",
     },
     createdAt: "2024-02-11 00:03:52",
     comments: [],
@@ -52,9 +52,28 @@ export const samplePosts = [
       name: "Patrick M",
       image: "",
       id: "2",
-      username: "patrick"
+      username: "patrick",
     },
     createdAt: "2024-02-11 00:03:52",
     comments: [],
   },
-]
+];
+
+export const sampleJobs = [
+  {
+    id: 1,
+    company: "Google",
+    title: "Frontend Engineer",
+    location: "Remote",
+    role: "fulltime",
+    url: "https://www.justinvariara.com/",
+  },
+  {
+    id: 2,
+    company: "Netflix",
+    title: "Graduate Software Engineer",
+    location: "San Jose, CA",
+    role: "fulltime",
+    url: "https://www.justinvariara.com/",
+  },
+];

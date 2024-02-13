@@ -1,10 +1,12 @@
 "use client";
+import JobItem from "@/components/JobItem";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Post from "@/components/Post";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { profileTabs, samplePosts } from "@/constants";
+import { profileTabs, sampleJobs, samplePosts } from "@/constants";
 import { useUser } from "@/context/UserContext";
+import { Job } from "@/types/job";
 import Image from "next/image";
 
 const Page = ({ params }: { params: { slug: string } }) => {
@@ -90,10 +92,29 @@ const Page = ({ params }: { params: { slug: string } }) => {
               </TabsTrigger>
             ))}
           </TabsList>
+          {/* Posts Tab */}
           <TabsContent value="posts">
-            <div className="flex flex-col gap-10 my-6">
+            <div className="flex flex-col gap-6 my-6">
               {samplePosts.map((post) => (
                 <Post post={post} key={post.id} />
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Applied Jobs Tab */}
+          <TabsContent value="applied_jobs">
+            <div className="flex flex-col gap-6 my-6">
+              {sampleJobs.map((job) => (
+                <JobItem job={job as Job} location="applied" key={job.id} />
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Saved Jobs Tab */}
+          <TabsContent value="saved_jobs">
+            <div className="flex flex-col gap-6 my-6">
+              {sampleJobs.map((job) => (
+                <JobItem job={job as Job} location="saved" key={job.id} />
               ))}
             </div>
           </TabsContent>

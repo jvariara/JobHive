@@ -32,7 +32,7 @@ if __name__ == '__main__':
     port = int(os.getenv('PORT', 8000))
     app = app_obj()
     init_app(app)
-    
+        
     from controllers.authorize import auth_controller
 
     app.register_blueprint(auth_controller, url_prefix='/auth')

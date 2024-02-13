@@ -29,3 +29,32 @@ export const profileTabs = [
   { value: "applied_jobs", label: "Applied Jobs" },
   { value: "saved_jobs", label: "Saved Jobs" },
 ];
+
+export const samplePosts = [
+  {
+    id: "1",
+    parentId: null,
+    content: "Anyone hiring for frontend developers?",
+    author: {
+      name: "Justin",
+      image: "",
+      id: "1",
+      username: "Justin"
+    },
+    createdAt: "2024-02-11 00:03:52",
+    comments: [],
+  },
+  {
+    id: "2",
+    parentId: null,
+    content: "Just got an offer from nvidia!!",
+    author: {
+      name: "Patrick M",
+      image: "",
+      id: "2",
+      username: "patrick"
+    },
+    createdAt: "2024-02-11 00:03:52",
+    comments: [],
+  },
+]

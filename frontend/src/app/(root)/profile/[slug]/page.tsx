@@ -1,8 +1,9 @@
 "use client";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import Post from "@/components/Post";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { profileTabs } from "@/constants";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { profileTabs, samplePosts } from "@/constants";
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 
@@ -89,6 +90,13 @@ const Page = ({ params }: { params: { slug: string } }) => {
               </TabsTrigger>
             ))}
           </TabsList>
+          <TabsContent value="posts">
+            <div className="flex flex-col gap-10 my-6">
+              {samplePosts.map((post) => (
+                <Post post={post} key={post.id} />
+              ))}
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
     </MaxWidthWrapper>

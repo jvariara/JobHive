@@ -16,6 +16,7 @@ const Page = () => {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("")
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
@@ -32,6 +33,11 @@ const Page = () => {
       username: "",
       password: "",
     });
+
+    if(confirmPassword !== password){
+      setErrorMessage("Passwords do not match. Please try again.")
+      return
+    }
 
     const userData = { email, username, password };
 
@@ -168,6 +174,23 @@ const Page = () => {
                     placeholder=""
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                  />
+                  {errors?.password && (
+                    <p className="text-sm text-red-500">{errors.password}</p>
+                  )}
+                </div>
+
+                {/* Confirm Password */}
+                <div className="gap-2 py-2 grid">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input
+                    className={cn({
+                      "focus-visible:ring-red-500": errors.password,
+                    })}
+                    placeholder=""
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     type="password"
                   />
                   {errors?.password && (

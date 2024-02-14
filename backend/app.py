@@ -35,7 +35,11 @@ if __name__ == '__main__':
     init_app(app)
         
     from controllers.authorize import auth_controller
+    
+    from controllers.jobs_controller import jobs_controller
 
     app.register_blueprint(auth_controller, url_prefix='/auth')
+    
+    app.register_blueprint(jobs_controller, url_prefix='/jobs')
 
     app.run(port=port, host=host, debug=True)

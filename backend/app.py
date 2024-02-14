@@ -25,7 +25,7 @@ def app_obj():
     app.config['DEBUG'] = os.getenv('DEBUG', False)
         
     CORS(app, supports_credentials=True, resources={r"/auth/*": {"origins": "http://localhost:3000"}})
-    
+        
     return app
 
 if __name__ == '__main__':

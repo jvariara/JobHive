@@ -1,3 +1,5 @@
 venv
 database.ini
 .env
+/scripts/users.txt
+__pycache__/

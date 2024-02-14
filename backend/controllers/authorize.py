@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify
+import json
+from flask import Blueprint, request, jsonify, make_response
 from models.user import Users
 from password_validator import PasswordValidator
 from email_validator import validate_email
@@ -9,15 +10,12 @@ from functools import wraps
 
 auth_controller = Blueprint('auth_controller', __name__)
 
-# TODO: MOVE TO .env FILE
 SECRET_KEY=os.getenv('SECRET_KEY')
 
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = None
-        if 'Authorization' in request.headers:
-            token = request.headers['Authorization'].split(" ")[1]
+        token = request.cookies.get('auth_token')
         if not token:
             return jsonify({'message' : 'Token is missing!'}), 403
         try:
@@ -32,11 +30,6 @@ def token_required(f):
 @auth_controller.route('/sign-in', methods=['POST'])
 def sign_in():
     req = request.json
-    res = {
-        'status': '',
-        'error': '',
-        'token': None
-    }
     try:
         user = Users.find_by_username(username=req['username'])
         if user and Users.check_password(user, req['password']):
@@ -44,25 +37,20 @@ def sign_in():
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1), # token expires in 1 day
                 'iat': datetime.datetime.utcnow(),
-                'sub': user.username # User user identifier
+                'sub': user.id # Unique user identifier
             }
             token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-            res['status'] = 'success'
-            res['token'] = token
+            response = make_response(jsonify({'status': 'success', 'token': token }))
+            response.set_cookie('auth_token', token, httponly=True, secure=True, samesite='Lax')
+            return response
         else:
             raise Exception("The username or password credentials are incorrect")
     except Exception as init:
-        res['status'] = 'error'
-        res['error'] = init.args[0]
-    return jsonify(res)
+        return jsonify({ 'status': 'error', 'error': init.args[0] }), 401
 
 @auth_controller.route('/register', methods=['POST'])
 def register():
     req = request.json
-    res = {
-        'status': '',
-        'error': '',
-    }
     try:
         if not validate_password(req['password']):
             raise Exception("Please enter a valid password")
@@ -78,11 +66,24 @@ def register():
                          req['email'],
                          req['password'])
         new_user.save()
-        res['status'] = 'success'   
-    except Exception as inst:
-        res['status'] = 'error'
-        res['error'] = inst.args[0]
-    return jsonify(res)
+        return jsonify({'status': 'success', 'message': 'User registered successfully'}), 201
+    except Exception as init:
+        return jsonify({ 'status': 'error', 'error': init.args[0] }), 400
+
+@auth_controller.route('/logout', methods=['GET'])
+def logout():
+    response = make_response(jsonify({'status': 'success', 'message': 'Logged out successfully'}))
+    response.set_cookie('auth_token', '', expires=0)
+    return response
+
+@auth_controller.route('/get-session', methods=["GET"])
+@token_required
+def get_user_session(current_user):
+    user = Users.find_by_id(id=current_user)
+    if user:
+        return jsonify({ 'user': user.to_dict()})
+    else:
+        return jsonify({ 'error': "User not found" }), 404
 
 def validate_password(password):  
     schema = PasswordValidator()

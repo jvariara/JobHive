@@ -14,4 +14,7 @@ class Jobs(db.model):
         self.company = company
         self.title = title
         self.location = location
-        
+        self.job_type = job_type
+        self.url = url
+    
+    

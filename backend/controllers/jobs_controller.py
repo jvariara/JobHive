@@ -12,7 +12,7 @@ def get_fulltime():
 def get_all():
     pass
 
-@jobs_controller.route('', method=['GET'])
+@jobs_controller.route('', methods=['GET'])
 def get_jobs():
     job_type = request.args.get('type')
     
@@ -23,3 +23,5 @@ def get_jobs():
         pass
     else:
         pass
+    
+    return

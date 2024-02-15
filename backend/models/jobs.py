@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from .user import db
 
+
 class Jobs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company = db.Column(db.String(40), nullable=False)
@@ -17,4 +18,15 @@ class Jobs(db.Model):
         self.job_type = job_type
         self.url = url
     
+    @staticmethod
+    def get_internships():
+        
+        pass
     
+    @staticmethod
+    def get_fulltime():
+        pass
+    
+    @staticmethod
+    def get_all():
+        pass

@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from flask_cors import CORS
 from db import init_app
+from scripts.seed import create_job
 
 
 
@@ -41,5 +42,9 @@ if __name__ == '__main__':
     app.register_blueprint(auth_controller, url_prefix='/auth')
     
     app.register_blueprint(jobs_controller, url_prefix='/jobs')
+    
+    #run seeding scripts here
+    # with app.app_context():
+    #     create_job()
 
     app.run(port=port, host=host, debug=True)

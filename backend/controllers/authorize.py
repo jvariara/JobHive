@@ -1,4 +1,3 @@
-import json
 from flask import Blueprint, request, jsonify, make_response
 from models.user import Users
 from password_validator import PasswordValidator
@@ -6,7 +5,6 @@ from email_validator import validate_email
 import jwt
 import datetime
 import os
-from functools import wraps
 from .middleware import token_required
 
 auth_controller = Blueprint('auth_controller', __name__)

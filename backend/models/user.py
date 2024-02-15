@@ -1,13 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
-
-db = SQLAlchemy()
-def init_app(app: Flask):
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
+from db import db
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)

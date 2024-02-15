@@ -10,3 +10,5 @@ Flask-Migrate
 password-validator
 PyJWT
 email-validator
+beautifulsoup4
+requests

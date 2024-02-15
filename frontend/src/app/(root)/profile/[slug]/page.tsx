@@ -36,7 +36,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
 
   return (
     <MaxWidthWrapper>
-      <div className="mt-10 px-10 md:px-20 py-6 md:py-8 bg-secondary rounded-lg flex justify-between">
+      <div className="mt-8 px-10 md:px-20 py-6 md:py-8 bg-secondary rounded-lg flex justify-between">
         <div className="flex flex-col items-center lg:items-start gap-y-4 w-full">
           <div className="flex items-center flex-col gap-y-4 lg:gap-y-0 lg:flex-row lg:justify-between w-full">
             <div className="flex items-center gap-x-5">

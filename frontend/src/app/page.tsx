@@ -22,7 +22,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <MaxWidthWrapper>
-      <div className="flex mt-10 mb-10 gap-x-4">
+      <div className="flex mt-8 mb-10 gap-x-4">
         <div className="hidden lg:flex flex-col gap-y-4">
           {/* Profile Section */}
           <div className="px-12 py-8 bg-secondary rounded-lg flex flex-col items-center gap-y-4">

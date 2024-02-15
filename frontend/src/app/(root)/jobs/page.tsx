@@ -116,7 +116,7 @@ const Page = ({
   };
   return (
     <MaxWidthWrapper>
-      <div className="mt-10 px-10 md:px-20 py-6 md:py-8 bg-secondary rounded-lg flex flex-col">
+      <div className="mt-8 px-10 md:px-20 py-6 md:py-8 bg-secondary rounded-lg flex flex-col">
         <div className="flex items-center justify-between w-full mb-8">
           <h1 className="text-3xl md:text-4xl font-semibold text-secondary-foreground">
             Jobs

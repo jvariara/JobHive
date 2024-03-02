@@ -19,6 +19,8 @@ import { Job } from "@/types/job";
 import { User } from "@/types/user";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const Page = ({
   searchParams,
@@ -28,44 +30,7 @@ const Page = ({
   // const [user, setUser] = useState<User | null>(null);
   // @ts-ignore
   const { user } = useUser();
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      company: "Google",
-      title: "Frontend Engineer",
-      location: "Remote",
-      role: "fulltime",
-      url: "https://www.justinvariara.com/",
-      date_posted: "Mar 14",
-    },
-    {
-      id: 2,
-      company: "Netflix",
-      title: "Graduate Software Engineer",
-      location: "San Jose, CA",
-      role: "fulltime",
-      url: "https://www.justinvariara.com/",
-      date_posted: "Mar 14",
-    },
-    {
-      id: 3,
-      company: "JobHive",
-      title: "Backend Intern",
-      location: "New York, NY",
-      role: "internship",
-      url: "https://www.justinvariara.com/",
-      date_posted: "Mar 14",
-    },
-    {
-      id: 4,
-      company: "JobHive",
-      title: "Backend Intern",
-      location: "New York, NY",
-      role: "internship",
-      url: "https://www.justinvariara.com/",
-      date_posted: "Mar 14",
-    },
-  ]);
+  const [jobs, setJobs] = useState([]);
   const allJobs = [
     {
       id: 1,
@@ -105,9 +70,21 @@ const Page = ({
     },
   ];
 
+  const { data: jobResults } = useQuery({
+    queryKey: ["job-query"],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/jobs`
+      );
+      console.log(data);
+      setJobs(data);
+      return data;
+    },
+  });
+
   const filterJobs = (filter: string) => {
     // Use a copy of allJobs to apply filters
-    let filteredJobs = [...allJobs];
+    let filteredJobs = [...jobResults];
 
     if (filter === "INTERNSHIP") {
       filteredJobs = filteredJobs.filter((job) => job.role === "internship");
@@ -115,6 +92,7 @@ const Page = ({
       filteredJobs = filteredJobs.filter((job) => job.role === "fulltime");
     }
 
+    // @ts-ignore
     setJobs(filteredJobs);
   };
   return (
@@ -157,6 +135,7 @@ const Page = ({
       <div className="flex flex-col gap-y-6 mb-6">
         {jobs
           ? jobs.map((job) => (
+              // @ts-ignore
               <JobItem location="jobs" job={job as Job} key={job.id} />
             ))
           : null}

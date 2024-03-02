@@ -26,7 +26,7 @@ def app_obj():
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['DEBUG'] = os.getenv('DEBUG', False)
         
-    CORS(app, supports_credentials=True, resources={r"/auth/*": {"origins": "http://localhost:3000"}})
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
         
     return app
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     app.register_blueprint(jobs_controller, url_prefix='/jobs')
     
     #run seeding scripts here
-    #with app.app_context():
+    # with app.app_context():
     #     scrape_jobs_simplify()
     #     create_job()
     #     create_users()

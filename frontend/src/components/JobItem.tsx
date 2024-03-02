@@ -29,7 +29,7 @@ const JobItem = ({ job, location }: JobItemProps) => {
       <div className="flex justify-between w-full">
         <div className="flex flex-col gap-y-3">
           <div className="flex flex-col">
-            <h1 className="text-lg md:text-xl font-medium text-primary">
+            <h1 className={`${location === "feed" ? "text-md" : "text-lg"} md:text-xl font-medium text-primary`}>
               {job.title}
             </h1>
             <h5 className="text-md text-muted-foreground">{job.company}</h5>

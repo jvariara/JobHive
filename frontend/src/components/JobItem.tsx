@@ -11,6 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { Clock, MapPin } from "lucide-react";
+import { Badge } from "./ui/badge";
 
 interface JobItemProps {
   job: Job;
@@ -24,55 +26,89 @@ const JobItem = ({ job, location }: JobItemProps) => {
         location !== "feed" && "px-8"
       }`}
     >
-      <div className="flex flex-col gap-y-1 w-1/2">
-        <h1 className="text-2xl font-semibold">{job.company}</h1>
-        <h4 className="text-primary">{job.title}</h4>
-        <p>{job?.location}</p>
-        <p className="italic text-muted-foreground">
-          {job.role === "internship" ? "Internship" : "Full Time"}
-        </p>
-      </div>
+      <div className="flex justify-between w-full">
+        <div className="flex flex-col gap-y-3">
+          <div className="flex flex-col">
+            <h1 className="text-lg md:text-xl font-medium text-primary">
+              {job.title}
+            </h1>
+            <h5 className="text-md text-muted-foreground">{job.company}</h5>
+          </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-x-1">
+              <MapPin className="text-primary w-4 h-4" />
+              <span className="text-sm text-muted-foreground">
+                {job.location}
+              </span>
+            </div>
+          </div>
 
-      {location !== "applied" ? (
-        <div className="flex gap-x-4 flex-col sm:flex-row gap-y-4 sm:gap-y-0">
-          <Link href={job.url} className={buttonVariants()} target="_blank">
-            View
-          </Link>
-          <Button variant={"secondary"} className="border border-primary">
-            {location === "jobs" ? "Save" : "Unsave"}
-          </Button>
+          {/* buttons */}
+          <div>
+            {location !== "applied" ? (
+              <div className="flex gap-x-4 flex-row gap-y-0">
+                <Link
+                  href={job.url}
+                  className={buttonVariants()}
+                  target="_blank"
+                >
+                  View
+                </Link>
+                <Button
+                  variant={"secondary"}
+                  className="border border-primary text-sm"
+                >
+                  {location === "jobs" ? "Save" : "Unsave"}
+                </Button>
+              </div>
+            ) : (
+              <Select
+                onValueChange={(e) => console.log(e)}
+                defaultValue="APPLIED"
+              >
+                <SelectTrigger className="w-[180px] bg-secondary border-primary">
+                  <SelectValue placeholder="Job Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Job Status</SelectLabel>
+                    <SelectSeparator className="bg-primary" />
+                    <SelectItem className="cursor-pointer" value="APPLIED">
+                      Applied
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="DENIED">
+                      Denied
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="OA">
+                      Online Assessment
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="INTERVIEW">
+                      Interview
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="FINAL">
+                      Final Round
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="OFFER">
+                      Offer
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          </div>
         </div>
-      ) : (
-        <Select onValueChange={(e) => console.log(e)} defaultValue="APPLIED">
-          <SelectTrigger className="w-[180px] bg-secondary border-primary">
-            <SelectValue placeholder="Job Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Job Status</SelectLabel>
-              <SelectSeparator className="bg-primary" />
-              <SelectItem className="cursor-pointer" value="APPLIED">
-                Applied
-              </SelectItem>
-              <SelectItem className="cursor-pointer" value="DENIED">
-                Denied
-              </SelectItem>
-              <SelectItem className="cursor-pointer" value="OA">
-                Online Assessment
-              </SelectItem>
-              <SelectItem className="cursor-pointer" value="INTERVIEW">
-                Interview
-              </SelectItem>
-              <SelectItem className="cursor-pointer" value="FINAL">
-                Final Round
-              </SelectItem>
-              <SelectItem className="cursor-pointer" value="OFFER">
-                Offer
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      )}
+        <div className="flex flex-col justify-between">
+          <Badge variant="default" className="w-fit self-end">
+            {job.role === "fulltime" ? "Full-time" : "Internship"}
+          </Badge>
+          <div className="flex items-center gap-x-1">
+            <Clock className="text-primary w-4 h-4" />
+            <span className="text-sm text-muted-foreground">
+              Posted {job.date_posted}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

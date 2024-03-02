@@ -27,7 +27,7 @@ const Page = ({
 }) => {
   // const [user, setUser] = useState<User | null>(null);
   // @ts-ignore
-  const { user } = useUser()
+  const { user } = useUser();
   const [jobs, setJobs] = useState([
     {
       id: 1,
@@ -36,6 +36,7 @@ const Page = ({
       location: "Remote",
       role: "fulltime",
       url: "https://www.justinvariara.com/",
+      date_posted: "Mar 14",
     },
     {
       id: 2,
@@ -44,6 +45,7 @@ const Page = ({
       location: "San Jose, CA",
       role: "fulltime",
       url: "https://www.justinvariara.com/",
+      date_posted: "Mar 14",
     },
     {
       id: 3,
@@ -52,6 +54,7 @@ const Page = ({
       location: "New York, NY",
       role: "internship",
       url: "https://www.justinvariara.com/",
+      date_posted: "Mar 14",
     },
     {
       id: 4,
@@ -60,6 +63,7 @@ const Page = ({
       location: "New York, NY",
       role: "internship",
       url: "https://www.justinvariara.com/",
+      date_posted: "Mar 14",
     },
   ]);
   const allJobs = [
@@ -70,6 +74,7 @@ const Page = ({
       location: "Remote",
       role: "fulltime",
       url: "https://www.justinvariara.com/",
+      date_posted: "Mar 14",
     },
     {
       id: 2,
@@ -78,6 +83,7 @@ const Page = ({
       location: "San Jose, CA",
       role: "fulltime",
       url: "https://www.justinvariara.com/",
+      date_posted: "Mar 14",
     },
     {
       id: 3,
@@ -86,6 +92,7 @@ const Page = ({
       location: "New York, NY",
       role: "internship",
       url: "https://www.justinvariara.com/",
+      date_posted: "Mar 14",
     },
     {
       id: 4,
@@ -94,16 +101,9 @@ const Page = ({
       location: "New York, NY",
       role: "internship",
       url: "https://www.justinvariara.com/",
+      date_posted: "Mar 14",
     },
   ];
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const response = await fetchUserSession();
-  //     if (!response.user) redirect("/sign-in");
-  //     setUser(response.user);
-  //   })();
-  // }, []);
 
   const filterJobs = (filter: string) => {
     // Use a copy of allJobs to apply filters
@@ -156,7 +156,9 @@ const Page = ({
       {/* Job items */}
       <div className="flex flex-col gap-y-6 mb-6">
         {jobs
-          ? jobs.map((job) => <JobItem location="jobs" job={job as Job} key={job.id} />)
+          ? jobs.map((job) => (
+              <JobItem location="jobs" job={job as Job} key={job.id} />
+            ))
           : null}
       </div>
     </MaxWidthWrapper>

@@ -14,6 +14,7 @@ SECRET_KEY=os.getenv('SECRET_KEY')
 @auth_controller.route('/sign-in', methods=['POST'])
 def sign_in():
     req = request.json
+    req['username'] = req['username'].lower()
     try:
         user = Users.find_by_username(username=req['username'])
         if user and Users.check_password(user, req['password']):
@@ -35,6 +36,7 @@ def sign_in():
 @auth_controller.route('/register', methods=['POST'])
 def register():
     req = request.json
+    req['username'] = req['username'].lower()
     try:
         if not validate_password(req['password']):
             raise Exception("Please enter a valid password")

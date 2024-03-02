@@ -14,8 +14,14 @@ def get_posted_jobs():
 
     for y in raw_body.find_all('tr'):
         row = []
-        for x in y.find_all('td'):
-            row.append(x.text)
+        for idx, x in enumerate(y.find_all('td')):
+            if idx == 3 and x.find_all('a'):
+                links = x.find_all('a')
+                link = links[0].get('href')
+                row.append(link)
+            else:
+                row.append(x.text)
+        
         final_dict = {
             'company' : row[0],
             'title' : row[1],
@@ -23,6 +29,10 @@ def get_posted_jobs():
             'link' : row[3],
             'date posted': row[4]
         } if len(row[3]) > 0 else None
+        
         all_rows.append(final_dict)
-
-    print(all_rows)
+                
+    return all_rows
+    
+if __name__ == "__main__":
+    get_posted_jobs()

@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 import os
 from flask_cors import CORS
 from db import init_app
-from scripts.seed import create_job
+from scripts.seed import create_job, create_users, scrape_jobs_simplify
+from models.util import *
 
 
 
@@ -44,7 +45,12 @@ if __name__ == '__main__':
     app.register_blueprint(jobs_controller, url_prefix='/jobs')
     
     #run seeding scripts here
-    # with app.app_context():
+    #with app.app_context():
+    #     scrape_jobs_simplify()
     #     create_job()
+    #     create_users()
+    #     nuke()
+    
+    
 
     app.run(port=port, host=host, debug=True)

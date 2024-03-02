@@ -8,9 +8,7 @@ SECRET_KEY=os.getenv('SECRET_KEY')
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = None
-        if 'Authorization' in request.headers:
-            token = request.headers['Authorization'].split(" ")[1]
+        token = request.cookies.get('auth_token')
         if not token:
             return jsonify({'message' : 'Token is missing!'}), 403
         try:

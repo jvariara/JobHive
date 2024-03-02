@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUser } from "@/context/UserContext";
 import { fetchUserSession } from "@/lib/fetch-user";
 import { Job } from "@/types/job";
 import { User } from "@/types/user";
@@ -24,7 +25,9 @@ const Page = ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
+  // @ts-ignore
+  const { user } = useUser()
   const [jobs, setJobs] = useState([
     {
       id: 1,
@@ -94,13 +97,13 @@ const Page = ({
     },
   ];
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetchUserSession();
-      if (!response.user) redirect("/sign-in");
-      setUser(response.user);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await fetchUserSession();
+  //     if (!response.user) redirect("/sign-in");
+  //     setUser(response.user);
+  //   })();
+  // }, []);
 
   const filterJobs = (filter: string) => {
     // Use a copy of allJobs to apply filters

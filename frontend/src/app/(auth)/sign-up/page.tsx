@@ -20,6 +20,13 @@ const Page = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
 
+  // @ts-ignore
+  const { user } = useUser();
+
+  if(user) {
+    router.push("/")
+  }
+
   const [errors, setErrors] = useState({
     email: "",
     username: "",

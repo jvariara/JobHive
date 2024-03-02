@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -19,6 +19,19 @@ const Page = () => {
   const searchParams = useSearchParams();
   // used for redirecting when user signs in but came from somewhere else in the app
   const origin = searchParams.get("origin");
+
+  // @ts-ignore
+  const { user } = useUser();
+
+  if(user) {
+    if(origin){
+      // send them back to where they were
+      router.push(`/${origin}`)
+      return
+    }
+    router.push("/")
+  }
+
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();

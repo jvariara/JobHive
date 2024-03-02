@@ -3,6 +3,7 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Searchbar from "@/components/Searchbar";
 import UserItem from "@/components/UserItem";
+import { useUser } from "@/context/UserContext";
 import { fetchUserSession } from "@/lib/fetch-user";
 import { User } from "@/types/user";
 import { redirect } from "next/navigation";
@@ -13,15 +14,8 @@ const Page = ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const response = await fetchUserSession();
-      if (!response.user) redirect("/sign-in");
-      setUser(response.user);
-    })();
-  }, []);
+  // @ts-ignore
+  const { user } = useUser()
 
   return (
     <MaxWidthWrapper>

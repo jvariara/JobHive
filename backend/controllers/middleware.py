@@ -10,11 +10,11 @@ def token_required(f):
     def decorated(*args, **kwargs):
         token = request.cookies.get('auth_token')
         if not token:
-            return jsonify({'message' : 'Token is missing!'}), 403
+            return jsonify({'message' : 'Token is missing!'})
         try:
             data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
             current_user = data['sub']
         except:
-            return jsonify({'message': 'Token is invalid!'}), 401
+            return jsonify({'message': 'Token is invalid!'})
         return f(current_user, *args, **kwargs)
     return decorated

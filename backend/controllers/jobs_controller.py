@@ -6,7 +6,6 @@ jobs_controller = Blueprint('jobs_controller', __name__)
 @jobs_controller.route('', methods=['GET'])
 def get_jobs():
     role = request.args.get('type')
-
     try:
         jobs=Jobs.get_jobs(role)
     except Exception as init:

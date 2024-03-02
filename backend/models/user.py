@@ -34,6 +34,11 @@ class Users(db.Model):
     def find_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
     
+    @staticmethod
+    def nuke():
+        db.session.query(Users).delete()
+        db.session.commit()
+    
     def check_password(self, password):
         return (check_password_hash(self.password, password))
     
@@ -83,4 +88,5 @@ class Users(db.Model):
         
     # def check_password(self, password):
     #     return (check_password_hash(self.password, password))
+    
     

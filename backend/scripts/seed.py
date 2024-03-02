@@ -58,7 +58,7 @@ def scrape_jobs_simplify():
         new_job = Jobs(job['company'],
                        job['title'],
                        job['location'],
-                       "NA",
+                       "full time",
                        job['link'],
                        job['date posted'])
         new_job.save()

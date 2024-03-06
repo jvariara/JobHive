@@ -4,5 +4,5 @@ export interface Job {
     location: string
     role: "fulltime" | "internship"
     url: string
-    date_posted: string
+    date_posted?: string
 }

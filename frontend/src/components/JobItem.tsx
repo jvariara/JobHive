@@ -29,9 +29,13 @@ const JobItem = ({ job, location }: JobItemProps) => {
       <div className="flex justify-between w-full">
         <div className="flex flex-col gap-y-3">
           <div className="flex flex-col">
-            <h1 className={`${location === "feed" ? "text-md" : "text-lg"} md:text-xl font-medium text-primary`}>
+            <h2
+              className={`${
+                location === "feed" ? "text-md" : "text-lg"
+              } md:text-xl font-medium text-primary`}
+            >
               {job.title}
-            </h1>
+            </h2>
             <h5 className="text-md text-muted-foreground">{job.company}</h5>
           </div>
           <div className="flex flex-col">
@@ -98,7 +102,10 @@ const JobItem = ({ job, location }: JobItemProps) => {
           </div>
         </div>
         <div className="flex flex-col justify-between">
-          <Badge variant="default" className="w-fit self-end">
+          <Badge
+            variant="default"
+            className={`${location === "feed" ? "text-xs" : ""} w-fit self-end`}
+          >
             {job.role === "fulltime" ? "Full-time" : "Internship"}
           </Badge>
           <div className="flex items-center gap-x-1">

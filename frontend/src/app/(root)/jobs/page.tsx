@@ -4,6 +4,13 @@ import JobItem from "@/components/JobItem";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Searchbar from "@/components/Searchbar";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -14,13 +21,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUser } from "@/context/UserContext";
-import { fetchUserSession } from "@/lib/fetch-user";
 import { Job } from "@/types/job";
-import { User } from "@/types/user";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useState } from "react";
+
+const JOBS_PER_PAGE = 5;
 
 const Page = ({
   searchParams,
@@ -31,44 +37,8 @@ const Page = ({
   // @ts-ignore
   const { user } = useUser();
   const [jobs, setJobs] = useState([]);
-  const allJobs = [
-    {
-      id: 1,
-      company: "Google",
-      title: "Frontend Engineer",
-      location: "Remote",
-      role: "fulltime",
-      url: "https://www.justinvariara.com/",
-      date_posted: "Mar 14",
-    },
-    {
-      id: 2,
-      company: "Netflix",
-      title: "Graduate Software Engineer",
-      location: "San Jose, CA",
-      role: "fulltime",
-      url: "https://www.justinvariara.com/",
-      date_posted: "Mar 14",
-    },
-    {
-      id: 3,
-      company: "JobHive",
-      title: "Backend Intern",
-      location: "New York, NY",
-      role: "internship",
-      url: "https://www.justinvariara.com/",
-      date_posted: "Mar 14",
-    },
-    {
-      id: 4,
-      company: "JobHive",
-      title: "Backend Intern",
-      location: "New York, NY",
-      role: "internship",
-      url: "https://www.justinvariara.com/",
-      date_posted: "Mar 14",
-    },
-  ];
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(JOBS_PER_PAGE);
 
   const { data: jobResults } = useQuery({
     queryKey: ["job-query"],
@@ -76,7 +46,6 @@ const Page = ({
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/jobs`
       );
-      console.log(data);
       setJobs(data);
       return data;
     },
@@ -134,11 +103,50 @@ const Page = ({
       {/* Job items */}
       <div className="flex flex-col gap-y-6 mb-6">
         {jobs
-          ? jobs.map((job) => (
+          ? jobs.slice(startIndex, endIndex).map((job) => (
               // @ts-ignore
               <JobItem location="jobs" job={job as Job} key={job.id} />
             ))
           : null}
+
+        {/* Pagination */}
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={
+                  startIndex === 0
+                    ? "pointer-events-none opacity-50"
+                    : undefined
+                }
+                onClick={() => {
+                  if (startIndex > 0) {
+                    setStartIndex(startIndex - JOBS_PER_PAGE);
+                    setEndIndex(endIndex - JOBS_PER_PAGE);
+                  }
+                }}
+                href="#"
+              />
+            </PaginationItem>
+
+            <PaginationItem>
+              <PaginationNext
+                className={
+                  endIndex === 100
+                    ? "pointer-events-none opacity-50"
+                    : undefined
+                }
+                onClick={() => {
+                  if (endIndex < jobResults.length) {
+                    setStartIndex(startIndex + JOBS_PER_PAGE);
+                    setEndIndex(endIndex + JOBS_PER_PAGE);
+                  }
+                }}
+                href="#"
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </MaxWidthWrapper>
   );

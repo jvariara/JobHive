@@ -1,3 +1,4 @@
+"use client"
 import JobItem from "@/components/JobItem";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Post from "@/components/Post";
@@ -14,12 +15,19 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { sampleJobs, samplePosts } from "@/constants";
+import { useUser } from "@/context/UserContext";
 import { Job } from "@/types/job";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 // Display either normal home (feed) page or login/landing if user isnt logged in
-export default function Home() {
+export default function Page() {
+  // @ts-ignore
+  const { user } = useUser()
+
+  if(!user) redirect("/sign-in")
+
   return (
     <MaxWidthWrapper>
       <div className="flex mt-8 mb-10 gap-x-4">
@@ -64,10 +72,10 @@ export default function Home() {
             <h1 className="text-2xl font-semibold">Recent Jobs</h1>
             <div className="flex flex-col gap-6 my-6">
               {sampleJobs.map((job) => (
-                <>
-                  <JobItem job={job as Job} location="feed" key={job.id} />
+                <div key={job.id}>
+                  <JobItem job={job as Job} location="feed" />
                   <div aria-hidden="true" className="h-px bg-primary" />
-                </>
+                </div>
               ))}
             </div>
           </div>

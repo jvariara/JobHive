@@ -3,6 +3,7 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/context/UserContext";
 import { cn } from "@/lib/utils";
 import { UserValidator } from "@/lib/validations/user-validator";
 import Image from "next/image";

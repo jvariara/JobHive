@@ -22,4 +22,16 @@ export const UserValidator = z.object({
     }),
 });
 
+export const EditProfileValidator = z.object({
+  username: z
+    .string()
+    .min(5, { message: "Username must be at least 5 characters long" })
+    .max(20, { message: "Username must be at most 20 characters long" }),
+  display_name: z
+    .string()
+    .min(5, { message: "Display Name must be at least 5 characters long" })
+    .max(20, { message: "Display Name must be at most 20 characters long" }),
+});
+
+export type TEditProfileValidator = z.infer<typeof EditProfileValidator>;
 export type TUserValidator = z.infer<typeof UserValidator>;

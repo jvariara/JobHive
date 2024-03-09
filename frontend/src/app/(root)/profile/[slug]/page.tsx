@@ -13,26 +13,88 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs, sampleJobs, samplePosts } from "@/constants";
 import { useUser } from "@/context/UserContext";
+import {
+  EditProfileValidator,
+  TEditProfileValidator,
+} from "@/lib/validations/user-validator";
 import { Job } from "@/types/job";
-import { Copy } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { Copy, Router } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const Page = ({ params }: { params: { slug: string } }) => {
+  const router = useRouter()
   const otheruser = {
-    id: 1,
-    username: "Justin",
+    id: 2,
+    username: "patrick",
     email: "patrick@gmail.com",
-    display_name: "Justin",
+    display_name: "Patrick",
     bio: "Random text here for a bio section",
   };
 
   // @ts-ignore
   const { user } = useUser();
+
+  const editProfileForm = useForm<TEditProfileValidator>({
+    resolver: zodResolver(EditProfileValidator),
+    defaultValues: {
+      username: user?.username || "",
+      display_name: user?.display_name || "",
+    },
+  });
+
+  const { mutate: editUserProfile } = useMutation({
+    mutationFn: async ({ username, display_name }: TEditProfileValidator) => {
+      const payload: TEditProfileValidator = {
+        username,
+        display_name,
+      };
+
+      const { data } = await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${user?.id}`,
+        payload,
+        { withCredentials: true }
+      );
+
+      return data;
+    },
+    onError: (err) => {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 409) {
+          return toast.error("Username already taken.");
+        }
+      }
+
+      toast.error("There was an error. Please try again");
+    },
+    onSuccess: (data) => {
+      console.log(data)
+      toast.success("Profile successfully updated!");
+      router.push(`/profile/${data.username}`)
+    },
+  });
+
+  const onEditProfileSubmit = (values: TEditProfileValidator) => {
+    editUserProfile(values);
+  };
 
   return (
     <MaxWidthWrapper>
@@ -50,10 +112,10 @@ const Page = ({ params }: { params: { slug: string } }) => {
               />
               <div className="flex flex-col gap-y-1 items-start">
                 <h1 className="text-3xl md:text-4xl font-semibold">
-                  {otheruser.display_name}
+                  {user?.display_name}
                 </h1>
                 <h3 className="text-lg font-medium text-primary">
-                  @{otheruser.username}
+                  @{user?.username}
                 </h3>
               </div>
             </div>
@@ -73,45 +135,76 @@ const Page = ({ params }: { params: { slug: string } }) => {
             <p className="text-muted-foreground w-full">{otheruser.bio}</p>
             {/* Buttons */}
             {/* TODO: Set these dynamically based of if the otheruser profile we are viewing is the one logged in or not */}
-            {user?.username === otheruser?.username ? (
+            {user?.username === params.slug ? (
               <div className="flex gap-x-8">
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button>Edit Profile</Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
-                      <DialogTitle>Edit Profile</DialogTitle>
-                      <DialogDescription>
-                        Make changes to your profile here. Click save when
-                        you&apos;re done.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="display_name" className="text-right">
-                          Display Name
-                        </Label>
-                        <Input
-                          id="display_name"
-                          defaultValue={user.display_name}
-                          className="col-span-3"
-                        />
-                      </div>
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="username" className="text-right">
-                          Username
-                        </Label>
-                        <Input
-                          id="username"
-                          defaultValue={`${user.username}`}
-                          className="col-span-3"
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button type="submit">Save changes</Button>
-                    </DialogFooter>
+                    <Form {...editProfileForm}>
+                      <form
+                        onSubmit={editProfileForm.handleSubmit(
+                          onEditProfileSubmit
+                        )}
+                      >
+                        <DialogHeader>
+                          <DialogTitle>Edit Profile</DialogTitle>
+                          <DialogDescription>
+                            Make changes to your profile here. Click save when
+                            you&apos;re done.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          {/* Display Name form field */}
+                          <FormField
+                            control={editProfileForm.control}
+                            name="display_name"
+                            render={({ field }) => (
+                              <FormItem className="grid grid-cols-4 items-center gap-4">
+                                <FormLabel className="text-right">
+                                  Display Name
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="text"
+                                    className="col-span-3"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage className="col-span-4" />
+                              </FormItem>
+                            )}
+                          />
+
+                          {/* Username form field */}
+                          <FormField
+                            control={editProfileForm.control}
+                            name="username"
+                            render={({ field }) => (
+                              <FormItem className="grid grid-cols-4 items-center gap-4">
+                                <FormLabel className="text-right">
+                                  Username
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="text"
+                                    className="col-span-3"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage className="col-span-4" />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button type="submit">Save changes</Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </form>
+                    </Form>
                   </DialogContent>
                 </Dialog>
                 <Dialog>
@@ -132,8 +225,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
                         </Label>
                         <Input
                           id="link"
-                          // TODO: Update URL to live url
-                          defaultValue={`http://localhost:3000/profile/${user?.username}`}
+                          defaultValue={`${process.env.NEXT_PUBLIC_LIVE_URL}/profile/${user?.username}`}
                           readOnly
                         />
                       </div>
@@ -170,15 +262,20 @@ const Page = ({ params }: { params: { slug: string } }) => {
       <div>
         <Tabs defaultValue="posts" className="w-full">
           <TabsList className="flex min-h-[50px] flex-1 items-center gap-3 bg-background text-foreground border border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-            {profileTabs.map((tab) => (
-              <TabsTrigger
-                key={tab.label}
-                value={tab.value}
-                className="flex min-h-[48px] items-center gap-3 bg-background text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground w-full"
-              >
-                <p className="">{tab.label}</p>
-              </TabsTrigger>
-            ))}
+            {profileTabs.map((tab) => {
+              if (tab.value === "saved_jobs" && user?.username !== params.slug)
+                return;
+
+              return (
+                <TabsTrigger
+                  key={tab.label}
+                  value={tab.value}
+                  className="flex min-h-[48px] items-center gap-3 bg-background text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground w-full"
+                >
+                  <p className="">{tab.label}</p>
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
           {/* Posts Tab */}
           <TabsContent value="posts">
@@ -199,13 +296,15 @@ const Page = ({ params }: { params: { slug: string } }) => {
           </TabsContent>
 
           {/* Saved Jobs Tab */}
-          <TabsContent value="saved_jobs">
-            <div className="flex flex-col gap-6 my-6">
-              {sampleJobs.map((job) => (
-                <JobItem job={job as Job} location="saved" key={job.id} />
-              ))}
-            </div>
-          </TabsContent>
+          {user?.username === params.slug ? (
+            <TabsContent value="saved_jobs">
+              <div className="flex flex-col gap-6 my-6">
+                {sampleJobs.map((job) => (
+                  <JobItem job={job as Job} location="saved" key={job.id} />
+                ))}
+              </div>
+            </TabsContent>
+          ) : null}
         </Tabs>
       </div>
     </MaxWidthWrapper>

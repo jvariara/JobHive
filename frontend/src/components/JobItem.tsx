@@ -108,12 +108,14 @@ const JobItem = ({ job, location }: JobItemProps) => {
           >
             {job.role === "fulltime" ? "Full-time" : "Internship"}
           </Badge>
-          <div className="flex items-center gap-x-1">
-            <Clock className="text-primary w-4 h-4" />
-            <span className="text-sm text-muted-foreground">
-              Posted {job.date_posted}
-            </span>
-          </div>
+          {location !== "applied" ? (
+            <div className="flex items-center gap-x-1">
+              <Clock className="text-primary w-4 h-4" />
+              <span className="text-sm text-muted-foreground">
+                Posted {job.date_posted}
+              </span>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

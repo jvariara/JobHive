@@ -21,6 +21,9 @@ class Users(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+    
+    def update(self):
+        db.session.commit()
         
     @classmethod
     def find_by_username(cls, username):

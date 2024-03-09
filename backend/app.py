@@ -40,9 +40,13 @@ if __name__ == '__main__':
     
     from controllers.jobs_controller import jobs_controller
 
+    from controllers.user_controller import user_controller
+
     app.register_blueprint(auth_controller, url_prefix='/auth')
     
     app.register_blueprint(jobs_controller, url_prefix='/jobs')
+
+    app.register_blueprint(user_controller, url_prefix="/users")
     
     #run seeding scripts here
     # with app.app_context():
